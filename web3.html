@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Proyek portofolio desain dan web oleh WebVerse.">
+    <title>Creative Tech | WebVerse</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        primary: '#4f46e5', // Indigo-600
+                        secondary: '#ec4899', // Pink-500
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Mengatur jarak scroll agar tidak tertutup navbar */
+        html { scroll-padding-top: 5rem; }
+        
+        /* Custom Easing untuk Micro-interactions yang smooth */
+        .smooth-transition {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Animasi Filter Portofolio */
+        .hide-item { 
+            display: none; 
+        }
+        .show-item { 
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px) scale(0.98); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+
+        /* Animasi mengambang pada gambar hero */
+.hero-image-float {
+    animation: floatImage 6s ease-in-out infinite;
+}
+
+@keyframes floatImage {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(1deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+}
+
+/* Efek glow ikon layanan */
+.group:hover .ph, .group:hover .ph-fill {
+    animation: iconPop 0.4s ease-out forwards;
+}
+
+@keyframes iconPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1.1); }
+}
+
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-300 font-sans">
+
+    <header class="fixed w-full top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="#home" class="flex items-center gap-2 text-2xl font-bold text-primary dark:text-white">
+                    <i class="ph-fill ph-aperture text-3xl"></i>
+                    <span class="text-slate-800 dark:text-slate-300">Creative Tech</span>
+                </a>
+
+                <nav class="hidden md:flex items-center gap-8 font-medium">
+                    <a href="#home" class="hover:text-primary transition-colors">Beranda</a>
+                    <a href="#about" class="hover:text-primary transition-colors">Tentang Kami</a>
+                    <a href="#services" class="hover:text-primary transition-colors">Layanan</a>
+                    <a href="#portfolio" class="hover:text-primary transition-colors">Portofolio</a>
+                    
+                    <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle Dark Mode">
+                        <i id="theme-icon" class="ph ph-moon text-xl"></i>
+                    </button>
+
+                    <a href="#contact" class="smooth-transition bg-primary text-white px-5 py-2.5 rounded-full hover:bg-indigo-700 hover:shadow-lg hover:-translate-y-0.5">Hubungi Kami</a>
+                </nav>
+
+                <div class="md:hidden flex items-center gap-4">
+                    <button id="mobile-theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+                        <i id="mobile-theme-icon" class="ph ph-moon text-xl"></i>
+                    </button>
+                    <button id="mobile-menu-btn" class="text-2xl focus:outline-none">
+                        <i id="menu-icon" class="ph ph-list"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-6 space-y-4 shadow-lg absolute w-full transition-all">
+            <a href="#home" class="block font-medium hover:text-primary">Beranda</a>
+            <a href="#about" class="block font-medium hover:text-primary">Tentang Kami</a>
+            <a href="#services" class="block font-medium hover:text-primary">Layanan</a>
+            <a href="#portfolio" class="block font-medium hover:text-primary">Portofolio</a>
+            <a href="#contact" class="block text-center mt-4 bg-primary text-white px-5 py-2.5 rounded-full font-medium">Hubungi Kami</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col-reverse lg:flex-row items-center gap-12">
+                <div class="lg:w-1/2 flex flex-col gap-6 text-center lg:text-left" data-aos="fade-right">
+                    <div class="inline-flex items-center gap-2 bg-indigo-100 dark:bg-indigo-900/30 text-primary px-4 py-2 rounded-full w-fit mx-auto lg:mx-0 text-sm font-semibold">
+                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                        Digital Agency Terbaik 2026
+                    </div>
+                    <h1 class="text-4xl lg:text-6xl font-bold leading-tight">
+                        Wujudkan Visi Digital Anda Menjadi <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Realita</span>.
+                    </h1>
+                    <p class="text-lg text-slate-600 dark:text-slate-400">
+                        Kami merancang pengalaman UI/UX tingkat tinggi, aplikasi web berkinerja cepat, dan identitas brand yang tak terlupakan untuk meningkatkan bisnis Anda.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mt-4">
+                        <a href="#portfolio" class="smooth-transition bg-primary text-white px-8 py-3.5 rounded-full font-semibold hover:bg-indigo-700 hover:shadow-xl hover:shadow-indigo-500/20 hover:-translate-y-1 hover:scale-105">Lihat Karya Kami</a>
+                        <a href="#about" class="smooth-transition bg-white dark:bg-slate-800 text-slate-800 dark:text-white border border-slate-200 dark:border-slate-700 px-8 py-3.5 rounded-full font-semibold hover:border-primary hover:text-primary dark:hover:text-primary hover:-translate-y-1 hover:scale-105">Pelajari Lebih Lanjut</a>
+                    </div>
+                </div>
+                <div class="lg:w-1/2 relative" data-aos="fade-left" data-aos-delay="200">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-primary to-secondary blur-[100px] opacity-20 dark:opacity-30 rounded-full"></div>
+                    <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=800" alt="Workspace" class="smooth-transition relative z-10 rounded-3xl shadow-2xl hover:rotate-1 border border-white/20 hero-image-float">
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="py-20 bg-white dark:bg-slate-800/50 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div class="order-2 lg:order-1 grid grid-cols-2 gap-4" data-aos="fade-up">
+                        <div class="smooth-transition bg-slate-50 dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 hover:-translate-y-2">
+                            <h3 class="text-4xl font-bold text-primary mb-2">150+</h3>
+                            <p class="text-slate-600 dark:text-slate-400">Proyek Selesai</p>
+                        </div>
+                        <div class="smooth-transition bg-slate-50 dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 hover:-translate-y-2 transform translate-y-8">
+                            <h3 class="text-4xl font-bold text-secondary mb-2">98%</h3>
+                            <p class="text-slate-600 dark:text-slate-400">Klien Puas</p>
+                        </div>
+                        <div class="smooth-transition bg-slate-50 dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 hover:-translate-y-2">
+                            <h3 class="text-4xl font-bold text-primary mb-2">10+</h3>
+                            <p class="text-slate-600 dark:text-slate-400">Penghargaan</p>
+                        </div>
+                        <div class="smooth-transition bg-slate-50 dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 hover:-translate-y-2 transform translate-y-8">
+                            <h3 class="text-4xl font-bold text-secondary mb-2">5 Thn</h3>
+                            <p class="text-slate-600 dark:text-slate-400">Pengalaman</p>
+                        </div>
+                    </div>
+                    <div class="order-1 lg:order-2 space-y-6" data-aos="fade-left" data-aos-delay="200">
+                        <h2 class="text-primary font-bold uppercase tracking-wider text-sm">Tentang Kami</h2>
+                        <h3 class="text-3xl lg:text-4xl font-bold">Inovasi Digital Berpadu dengan Kreativitas Tanpa Batas</h3>
+                        <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Creative Tech bukan sekadar agensi; kami adalah mitra teknologi Anda. Berdiri dengan visi untuk menjembatani kesenjangan antara desain estetis dan fungsi teknis yang tangguh.
+                        </p>
+                        <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Tim engineer dan desainer kami berdedikasi membangun produk digital (web & mobile) yang tidak hanya memanjakan mata, namun memiliki performa tinggi, aksesibilitas yang baik, serta skalabilitas kelas enterprise.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-primary font-bold uppercase tracking-wider text-sm mb-2" data-aos="fade-up">Layanan Kami</h2>
+                <h3 class="text-3xl lg:text-4xl font-bold mb-12" data-aos="fade-up" data-aos-delay="100">Solusi Digital Komprehensif</h3>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div data-aos="fade-up" data-aos-delay="0" class="group smooth-transition bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-sm hover:shadow-2xl hover:shadow-indigo-500/5 border border-slate-100 dark:border-slate-700 hover:border-primary/30 hover:-translate-y-2 cursor-pointer text-left">
+                        <div class="w-14 h-14 bg-indigo-100 dark:bg-indigo-900/40 text-primary rounded-2xl flex items-center justify-center text-3xl mb-6 smooth-transition group-hover:scale-110 group-hover:rotate-6">
+                            <i class="ph ph-code"></i>
+                        </div>
+                        <h4 class="text-xl font-bold mb-3">Web Development</h4>
+                        <p class="text-slate-600 dark:text-slate-400">Aplikasi web kustom, e-commerce, dan platform korporat dengan performa tinggi menggunakan tech stack modern seperti React, Vue, & Node.js.</p>
+                    </div>
+                    <div data-aos="fade-up" data-aos-delay="150" class="group smooth-transition bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-sm hover:shadow-2xl hover:shadow-pink-500/5 border border-slate-100 dark:border-slate-700 hover:border-secondary/30 hover:-translate-y-2 cursor-pointer text-left">
+                        <div class="w-14 h-14 bg-pink-100 dark:bg-pink-900/40 text-secondary rounded-2xl flex items-center justify-center text-3xl mb-6 smooth-transition group-hover:scale-110 group-hover:rotate-6">
+                            <i class="ph ph-device-mobile"></i>
+                        </div>
+                        <h4 class="text-xl font-bold mb-3">UI/UX Design</h4>
+                        <p class="text-slate-600 dark:text-slate-400">Riset pengguna, wireframing, prototipe interaktif, dan desain antarmuka yang intuitif untuk memaksimalkan retensi dan kepuasan pengguna.</p>
+                    </div>
+                    <div data-aos="fade-up" data-aos-delay="300" class="group smooth-transition bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-sm hover:shadow-2xl hover:shadow-indigo-500/5 border border-slate-100 dark:border-slate-700 hover:border-primary/30 hover:-translate-y-2 cursor-pointer text-left">
+                        <div class="w-14 h-14 bg-indigo-100 dark:bg-indigo-900/40 text-primary rounded-2xl flex items-center justify-center text-3xl mb-6 smooth-transition group-hover:scale-110 group-hover:rotate-6">
+                            <i class="ph ph-bezier-curve"></i>
+                        </div>
+                        <h4 class="text-xl font-bold mb-3">Branding Identity</h4>
+                        <p class="text-slate-600 dark:text-slate-400">Pembuatan logo, pedoman merek, dan material grafis visual yang kuat untuk membangun kehadiran perusahaan Anda di pasar global.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="portfolio" class="py-20 bg-white dark:bg-slate-800/50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12" data-aos="fade-up">
+                    <h2 class="text-primary font-bold uppercase tracking-wider text-sm mb-2">Karya Kami</h2>
+                    <h3 class="text-3xl lg:text-4xl font-bold mb-8">Eksplorasi Proyek Terbaik</h3>
+                    
+                    <div class="flex flex-wrap justify-center gap-4" id="portfolio-filters">
+                        <button class="filter-btn active px-6 py-2 rounded-full bg-primary text-white font-medium transition-all" data-filter="all">Semua</button>
+                        <button class="filter-btn px-6 py-2 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-300 dark:hover:bg-slate-600 transition-all" data-filter="web">Web App</button>
+                        <button class="filter-btn px-6 py-2 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-300 dark:hover:bg-slate-600 transition-all" data-filter="mobile">Mobile App</button>
+                        <button class="filter-btn px-6 py-2 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-300 dark:hover:bg-slate-600 transition-all" data-filter="branding">Branding</button>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="portfolio-grid" data-aos="fade-up" data-aos-delay="100">
+                    <div class="portfolio-item group relative rounded-2xl overflow-hidden shadow-md cursor-pointer" data-category="mobile">
+                        <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=600" alt="Health App" class="w-full h-64 object-cover smooth-transition group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/50 to-transparent translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 smooth-transition flex flex-col justify-end p-6">
+                            <span class="text-secondary font-bold text-sm mb-1 uppercase">Mobile App</span>
+                            <h4 class="text-white text-xl font-bold">Vitality Health Tracker</h4>
+                        </div>
+                    </div>
+                    <div class="portfolio-item group relative rounded-2xl overflow-hidden shadow-md cursor-pointer" data-category="branding">
+                        <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=600" alt="Brand Identity" class="w-full h-64 object-cover smooth-transition group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/50 to-transparent translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 smooth-transition flex flex-col justify-end p-6">
+                            <span class="text-indigo-400 font-bold text-sm mb-1 uppercase">Branding</span>
+                            <h4 class="text-white text-xl font-bold">Lumina Coffee Rebrand</h4>
+                        </div>
+                    </div>
+                    <div class="portfolio-item group relative rounded-2xl overflow-hidden shadow-md cursor-pointer" data-category="web">
+                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=600" alt="E-Commerce" class="w-full h-64 object-cover smooth-transition group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/50 to-transparent translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 smooth-transition flex flex-col justify-end p-6">
+                            <span class="text-primary font-bold text-sm mb-1 uppercase">Web App</span>
+                            <h4 class="text-white text-xl font-bold">EcoStore E-Commerce Platform</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials" class="py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12" data-aos="fade-up">
+                    <h2 class="text-primary font-bold uppercase tracking-wider text-sm mb-2">Testimoni</h2>
+                    <h3 class="text-3xl lg:text-4xl font-bold">Apa Kata Klien Kami</h3>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8" data-aos="fade-up" data-aos-delay="150">
+                    <div class="bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 relative">
+                        <i class="ph-fill ph-quotes text-4xl text-primary/20 absolute top-6 right-8"></i>
+                        <div class="flex items-center gap-4 mb-6">
+                            <img src="https://i.pravatar.cc/150?img=68" alt="Client" class="w-16 h-16 rounded-full object-cover">
+                            <div>
+                                <h4 class="font-bold text-lg">Budi Santoso</h4>
+                                <p class="text-sm text-slate-500">CEO, TechNusantara</p>
+                            </div>
+                        </div>
+                        <p class="text-slate-600 dark:text-slate-400 italic">"Hasil kerja yang sangat luar biasa. Tim Creative Tech berhasil merombak total website kami dengan performa yang jauh lebih cepat dan desain yang sangat elegan. Konversi penjualan kami naik 40%!"</p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 relative">
+                        <i class="ph-fill ph-quotes text-4xl text-secondary/20 absolute top-6 right-8"></i>
+                        <div class="flex items-center gap-4 mb-6">
+                            <img src="https://i.pravatar.cc/150?img=47" alt="Client" class="w-16 h-16 rounded-full object-cover">
+                            <div>
+                                <h4 class="font-bold text-lg">Anita Wijaya</h4>
+                                <p class="text-sm text-slate-500">Founder, LocalBites</p>
+                            </div>
+                        </div>
+                        <p class="text-slate-600 dark:text-slate-400 italic">"Sebagai startup baru, branding sangat penting. Mereka memberikan identitas visual yang fresh dan sesuai dengan target pasar kami. Komunikasi timnya juga sangat profesional dan responsif."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-20 bg-primary dark:bg-slate-800 text-white relative overflow-hidden">
+            <div class="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+            
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div data-aos="fade-right">
+                        <h2 class="text-3xl lg:text-5xl font-bold mb-6">Siap Memulai Proyek Anda?</h2>
+                        <p class="text-indigo-100 dark:text-slate-300 text-lg mb-8 leading-relaxed">Jangan ragu untuk menghubungi kami. Tim ahli kami siap mendiskusikan ide Anda dan memberikan solusi teknis terbaik.</p>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-xl"><i class="ph ph-envelope-simple"></i></div>
+                                <div>
+                                    <p class="text-sm text-indigo-200">Email Kami</p>
+                                    <p class="font-bold">hello@creativeteach.dev</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-xl"><i class="ph ph-map-pin"></i></div>
+                                <div>
+                                    <p class="text-sm text-indigo-200">Kantor Pusat</p>
+                                    <p class="font-bold">Kepanjen, Jawa Timur, Indonesia</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-2xl text-slate-800 dark:text-slate-100" data-aos="zoom-in" data-aos-delay="150">
+                        <h3 class="text-2xl font-bold mb-6">Kirim Pesan</h3>
+                        <form id="contact-form" novalidate>
+                            <div class="mb-4 relative">
+                                <label for="name" class="block text-sm font-medium mb-1">Nama Lengkap</label>
+                                <input type="text" id="name" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" placeholder="John Doe" required>
+                                <span class="text-red-500 text-xs hidden mt-1" id="name-error">Nama tidak boleh kosong.</span>
+                            </div>
+                            <div class="mb-4 relative">
+                                <label for="email" class="block text-sm font-medium mb-1">Email</label>
+                                <input type="email" id="email" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" placeholder="john@example.com" required>
+                                <span class="text-red-500 text-xs hidden mt-1" id="email-error">Masukkan format email yang valid.</span>
+                            </div>
+                            <div class="mb-6 relative">
+                                <label for="message" class="block text-sm font-medium mb-1">Pesan Anda</label>
+                                <textarea id="message" rows="4" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all resize-none" placeholder="Ceritakan tentang proyek Anda..." required></textarea>
+                                <span class="text-red-500 text-xs hidden mt-1" id="message-error">Pesan tidak boleh kosong.</span>
+                            </div>
+                            <button type="submit" class="w-full bg-primary text-white font-bold py-3.5 rounded-lg hover:bg-indigo-700 transition-colors shadow-lg shadow-primary/30 flex justify-center items-center gap-2">
+                                Kirim Sekarang <i class="ph ph-paper-plane-right"></i>
+                            </button>
+                            <div id="form-success" class="hidden mt-4 p-3 bg-green-100 text-green-700 rounded-lg text-sm text-center">Pesan berhasil dikirim! Kami akan segera menghubungi Anda.</div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2 text-xl font-bold text-white">
+                <i class="ph-fill ph-aperture text-primary"></i>
+                <span class="text-slate-300"></span>
+            </div>
+            
+            <p class="text-sm">&copy; 2026 Creative Tech.</p>
+            <div class="flex gap-4">
+                <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-colors"><i class="ph-fill ph-instagram-logo"></i></a>
+                <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-colors"><i class="ph-fill ph-linkedin-logo"></i></a>
+                <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-colors"><i class="ph-fill ph-github-logo"></i></a>
+            </div>
+            <div class="space-y-4 flex flex-col justify-between md:items-end">
+                    <a href="index.html" class="inline-flex items-center space-x-2 px-5 py-2.5 text-xs font-bold tracking-wide text-slate-500 border border-slate-200 dark:border-white/10 rounded-full hover:border-foodAmber transition-all">
+                        <i class="fa-solid fa-arrow-left-long"></i> <span>Kembali ke WebVerse</span>
+                    </a>
+                </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        /**
+ * Aura Creative Portfolio Script
+ * Tech Stack: ES6+ Vanilla JavaScript & AOS Initialization
+ */
+
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // --- 0. INITIALIZE AOS ANIMATION ---
+    if (typeof AOS !== 'undefined') {
+        AOS.init({
+            duration: 800,            // Kecepatan durasi animasi (ms)
+            easing: 'ease-out-cubic', // Transisi melambat organik di akhir
+            once: true,               // Hanya jalan 1x pas di-scroll ke bawah
+            offset: 120               // Trigger jarak piksel dari layar bawah
+        });
+    }
+    
+    // --- 1. DARK MODE TOGGLE LOGIC ---
+    const htmlElement = document.documentElement;
+    const themeToggles = [document.getElementById('theme-toggle'), document.getElementById('mobile-theme-toggle')];
+    const themeIcons = [document.getElementById('theme-icon'), document.getElementById('mobile-theme-icon')];
+    
+    const userTheme = localStorage.getItem('theme');
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (userTheme === 'dark' || (!userTheme && systemTheme)) {
+        htmlElement.classList.add('dark');
+        updateIcons(true);
+    }
+
+    themeToggles.forEach(btn => {
+        if(!btn) return;
+        btn.addEventListener('click', () => {
+            htmlElement.classList.toggle('dark');
+            const isDark = htmlElement.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateIcons(isDark);
+        });
+    });
+
+    function updateIcons(isDark) {
+        themeIcons.forEach(icon => {
+            if(!icon) return;
+            icon.className = isDark ? 'ph ph-sun text-xl' : 'ph ph-moon text-xl';
+        });
+    }
+
+    // --- 2. MOBILE MENU HAMBURGER LOGIC ---
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuIcon = document.getElementById('menu-icon');
+
+    if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const isHidden = mobileMenu.classList.contains('hidden');
+            menuIcon.className = isHidden ? 'ph ph-list' : 'ph ph-x';
+        });
+
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                menuIcon.className = 'ph ph-list';
+            });
+        });
+    }
+
+    // --- 3. INTERACTIVE PORTFOLIO FILTER LOGIC ---
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const portfolioItems = document.querySelectorAll('.portfolio-item');
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            filterBtns.forEach(b => {
+                b.classList.remove('bg-primary', 'text-white');
+                b.classList.add('bg-slate-200', 'text-slate-700', 'dark:bg-slate-700', 'dark:text-slate-300');
+            });
+            
+            const target = e.target;
+            target.classList.remove('bg-slate-200', 'text-slate-700', 'dark:bg-slate-700', 'dark:text-slate-300');
+            target.classList.add('bg-primary', 'text-white');
+
+            const filterValue = target.getAttribute('data-filter');
+
+            portfolioItems.forEach(item => {
+                if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
+                    item.classList.remove('hide-item');
+                    item.classList.add('show-item');
+                } else {
+                    item.classList.add('hide-item');
+                    item.classList.remove('show-item');
+                }
+            });
+        });
+    });
+
+    // --- 4. FORM VALIDATION LOGIC ---
+    const contactForm = document.getElementById('contact-form');
+    
+    if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            let isValid = true;
+            
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const messageInput = document.getElementById('message');
+            
+            const nameError = document.getElementById('name-error');
+            const emailError = document.getElementById('email-error');
+            const messageError = document.getElementById('message-error');
+            const formSuccess = document.getElementById('form-success');
+
+            if (nameInput.value.trim() === '') {
+                nameError.classList.remove('hidden');
+                nameInput.classList.add('border-red-500', 'focus:border-red-500', 'focus:ring-red-500/20');
+                isValid = false;
+            } else {
+                nameError.classList.add('hidden');
+                nameInput.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500/20');
+            }
+
+            const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+            if (!emailInput.value.match(emailPattern)) {
+                emailError.classList.remove('hidden');
+                emailInput.classList.add('border-red-500', 'focus:border-red-500', 'focus:ring-red-500/20');
+                isValid = false;
+            } else {
+                emailError.classList.add('hidden');
+                emailInput.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500/20');
+            }
+
+            if (messageInput.value.trim() === '') {
+                messageError.classList.remove('hidden');
+                messageInput.classList.add('border-red-500', 'focus:border-red-500', 'focus:ring-red-500/20');
+                isValid = false;
+            } else {
+                messageError.classList.add('hidden');
+                messageInput.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500/20');
+            }
+
+            if (isValid) {
+                formSuccess.classList.remove('hidden');
+                contactForm.reset();
+                setTimeout(() => {
+                    formSuccess.classList.add('hidden');
+                }, 5000);
+            }
+        });
+    }
+});
+    </script>
+</body>
+</html>

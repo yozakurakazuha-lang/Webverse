@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth" x-data="{ darkMode: false }" :class="{ 'dark': darkMode }">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Proyek portofolio desain dan web oleh WebVerse.">
+    <title>Velora Eats | WebVerse</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Alpine.js for Advanced State Management -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Animasi AOS -->
+     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        foodAmber: '#E28743',
+                        foodHover: '#CD7332',
+                        foodCream: '#FBE8A6',
+                        brandDark: '#120E0B',
+                        cardDark: '#1D1612'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .food-title { font-family: 'Comfortaa', cursive; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #E28743; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-[#FCF9F5] text-slate-800 dark:bg-brandDark dark:text-slate-200 transition-colors duration-300"
+      x-data="megaFoodSystem()">
+
+    <!-- TOP ANNOUNCEMENT BAR -->
+    <div class="bg-gradient-to-r from-foodAmber via-[#DEAB72] to-foodAmber text-white text-xs font-bold py-2 px-4 text-center relative z-50">
+        <span>Lapar Melanda? Gunakan Voucher <span class="underline">VELORA2026EAT</span> untuk Diskon Rp 30.000!</span>
+    </div>
+
+    <!-- NAVBAR (FULLY FUNCTIONAL) -->
+    <nav class="sticky top-0 z-40 bg-white/90 dark:bg-brandDark/90 backdrop-blur-md border-b border-orange-100/50 dark:border-white/5 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 gap-4">
+                
+                <!-- Hamburger Menu (Mobile Navigation) -->
+                <button @click="mobileNavOpen = !mobileNavOpen" class="md:hidden p-2 text-xl hover:text-foodAmber">
+                    <i class="fa-solid" :class="mobileNavOpen ? 'fa-xmark' : 'fa-bars'"></i>
+                </button>
+
+                <!-- Logo -->
+                <a href="#" @click="currentTab = 'home'" class="flex-shrink-0 flex items-center space-x-2">
+                    <span class="text-2xl font-black tracking-wide text-slate-900 dark:text-white food-title">
+                        Velora<span class="text-foodAmber">Eats</span>
+                    </span>
+                </a>
+
+                <!-- Navigation Tabs Menu (Desktop) -->
+                <div class="hidden md:flex items-center space-x-6 text-sm font-semibold">
+                    <button @click="currentTab = 'home'" :class="currentTab === 'home' ? 'text-foodAmber' : 'text-slate-600 dark:text-slate-300'" class="hover:text-foodAmber transition-colors">Beranda</button>
+                    <button @click="currentTab = 'shop'; selectedCategory = 'all'" :class="currentTab === 'shop' ? 'text-foodAmber' : 'text-slate-600 dark:text-slate-300'" class="hover:text-foodAmber transition-colors">Menu Kuliner</button>
+                    <button @click="currentTab = 'categories'" :class="currentTab === 'categories' ? 'text-foodAmber' : 'text-slate-600 dark:text-slate-300'" class="hover:text-foodAmber transition-colors">Kategori</button>
+                    <button @click="currentTab = 'wishlist'" :class="currentTab === 'wishlist' ? 'text-foodAmber' : 'text-slate-600 dark:text-slate-300'" class="hover:text-foodAmber transition-colors flex items-center gap-1">
+                        Favorit <span class="bg-orange-50 dark:bg-white/10 px-1.5 py-0.5 rounded text-xs text-foodAmber" x-text="wishlist.length">0</span>
+                    </button>
+                </div>
+
+                <!-- Desktop Search Bar -->
+                <div class="flex-1 max-w-xs hidden lg:block relative">
+                    <input type="text" placeholder="Mau makan apa hari ini?..." x-model="searchQuery" @focus="currentTab = 'shop'"
+                           class="w-full bg-slate-100 dark:bg-white/5 border border-transparent focus:border-foodAmber rounded-full py-2 pl-4 pr-10 text-sm text-slate-900 dark:text-white focus:outline-none">
+                    <i class="fa-solid fa-utensils absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                </div>
+
+                <!-- Right Action Icons -->
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    <button @click="darkMode = !darkMode" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/5 text-lg">
+                        <i x-show="!darkMode" class="fa-solid fa-moon text-slate-600"></i>
+                        <i x-show="darkMode" class="fa-solid fa-sun text-amber-400"></i>
+                    </button>
+
+                    <button @click="cartOpen = true" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/5 text-lg relative">
+                        <i class="fa-solid fa-plate-wheat text-slate-700 dark:text-slate-200"></i>
+                        <span x-show="cartCount() > 0" x-text="cartCount()" class="absolute -top-1 -right-1 bg-foodAmber text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center"></span>
+                    </button>
+
+                    <a href="index.html" class="hidden sm:inline-flex items-center space-x-1 px-4 py-2 text-xs font-bold tracking-wide border border-slate-200 dark:border-white/10 rounded-full hover:border-foodAmber transition-all">
+                        <i class="fa-solid fa-arrow-left"></i> <span>WebVerse</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Dynamic Navigation Menu Dropdown -->
+        <div x-show="mobileNavOpen" x-transition class="md:hidden border-b border-slate-100 dark:border-white/5 bg-white dark:bg-brandDark px-4 py-4 space-y-3 font-semibold text-sm flex flex-col">
+            <div class="relative w-full mb-2">
+                <input type="text" placeholder="Mau makan apa hari ini?..." x-model="searchQuery" @focus="currentTab = 'shop'; mobileNavOpen = false;" class="w-full bg-slate-100 dark:bg-white/5 rounded-xl py-2.5 pl-4 pr-10 text-sm">
+                <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            </div>
+            <button @click="currentTab = 'home'; mobileNavOpen = false" class="text-left py-2 border-b border-slate-100 dark:border-white/5">Beranda</button>
+            <button @click="currentTab = 'shop'; selectedCategory = 'all'; mobileNavOpen = false" class="text-left py-2 border-b border-slate-100 dark:border-white/5">Menu Kuliner</button>
+            <button @click="currentTab = 'categories'; mobileNavOpen = false" class="text-left py-2 border-b border-slate-100 dark:border-white/5">Kategori</button>
+            <button @click="currentTab = 'wishlist'; mobileNavOpen = false" class="text-left py-2 border-b border-slate-100 dark:border-white/5 flex justify-between">
+                <span>Favorit Saya</span> <span class="text-foodAmber" x-text="wishlist.length + ' Menu'"></span>
+            </button>
+            <a href="index.html" class="text-left py-2 text-slate-400">Kembali ke WebVerse</a>
+        </div>
+    </nav>
+
+    <!-- CONTENT DISPLAY ROUTER SWITCHES -->
+    
+    <!-- 1. HOME TAB PAGE VIEW -->
+    <div x-show="currentTab === 'home'">
+        <!-- HERO BANNER -->
+        <header class="relative bg-gradient-to-r from-orange-50 to-amber-50 dark:from-slate-950 dark:to-cardDark overflow-hidden py-16 sm:py-24">
+            <div data-aos="fade-right" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">
+                <div class="space-y-6 text-center md:text-left">
+                    <span class="inline-block bg-orange-100 dark:bg-orange-950/40 text-foodAmber font-bold text-xs uppercase tracking-widest px-4 py-1.5 rounded-full">Dibuat Segar Setiap Hari</span>
+                    <h1 class="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white leading-tight food-title">
+                        Kelezatan Otentik <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-foodAmber to-amber-500">Sajian Premium</span> Keluarga
+                    </h1>
+                    <p class="text-slate-600 dark:text-slate-400 max-w-md mx-auto md:mx-0 text-sm">Nikmati ragam hidangan utama bercita rasa tinggi, pastry premium bertekstur lembut, serta minuman segar pendamping harimu.</p>
+                    <div class="pt-4 flex flex-wrap justify-center md:justify-start gap-4">
+                        <button @click="currentTab = 'shop'" class="bg-slate-900 text-white dark:bg-white dark:text-brandDark font-bold px-8 py-3.5 rounded-full shadow-lg transition-transform transform hover:-translate-y-1">
+                            Pesan Sekarang <i class="fa-solid fa-bowl-food ml-2"></i>
+                        </button>
+                        <button @click="currentTab = 'categories'" class="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 font-bold px-8 py-3.5 rounded-full hover:bg-slate-50 transition-colors">
+                            Lihat Menu Kategori
+                        </button>
+                    </div>
+                </div>
+                <div data-aos="zoom-in" data-aos-delay="200" class="relative flex justify-center">
+                    <div class="w-72 h-80 sm:w-96 sm:h-96 rounded-full overflow-hidden border-8 border-white dark:border-white/5 shadow-2xl">
+                        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80" alt="Sajian Premium" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- FEATURED PRODUCTS SECTION -->
+        <section class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div0 data-aos="fade-down" class="flex justify-between items-end mb-10">
+                <div>
+                    <h2 class="text-2xl font-bold tracking-tight food-title">Menu Rekomendasi Chef</h2>
+                    <div class="w-12 h-1 bg-foodAmber mt-2 rounded-full"></div>
+                </div>
+                <button @click="currentTab = 'shop'" class="text-sm font-bold text-foodAmber hover:text-foodHover flex items-center gap-1">
+                    Lihat Semua Menu <i class="fa-solid fa-angle-right"></i>
+                </button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <template x-for="product in products.slice(0, 4)" :key="product.id">
+                    <div class="group bg-white dark:bg-cardDark border border-orange-50 dark:border-white/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                        <div class="relative aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-slate-900">
+                            <img :src="product.image" :alt="product.name" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 cursor-pointer" @click="openDetail(product)">
+                            <button @click="toggleWishlist(product)" class="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/80 dark:bg-brandDark/80 backdrop-blur-md flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-rose-500 transition-colors">
+                                <i class="fa-heart" :class="isWishlisted(product.id) ? 'fa-solid text-rose-500' : 'fa-regular'"></i>
+                            </button>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
+                            <div>
+                                <h4 class="font-bold text-slate-900 dark:text-white line-clamp-1 cursor-pointer text-base" @click="openDetail(product)" x-text="product.name"></h4>
+                                <div class="flex items-center gap-1 text-amber-400 text-xs mt-1">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                    <span class="text-slate-400 text-[10px] ml-1">(4.9 Ulasan)</span>
+                                </div>
+                                <p class="text-base font-black mt-2 text-foodAmber" x-text="formatRupiah(product.price)"></p>
+                            </div>
+                            <button @click="addToCart(product)" class="w-full bg-slate-900 text-white dark:bg-white dark:text-brandDark font-bold py-2.5 rounded-xl text-xs hover:bg-foodAmber dark:hover:bg-foodAmber dark:hover:text-white flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-cart-plus"></i> <span>Tambah Pesanan</span>
+                            </button>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </section>
+    </div>
+
+    <!-- 2. FULL SHOP & PRODUCT FILTER TAB VIEW -->
+    <div x-show="currentTab === 'shop'" class="py-12 border-t border-orange-50 dark:border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <!-- Filters Component Aside Panel -->
+                <aside class="bg-white dark:bg-cardDark p-6 rounded-2xl border border-orange-50 dark:border-white/5 h-fit space-y-6">
+                    <div>
+                        <h3 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-3">Kategori Hidangan</h3>
+                        <div class="space-y-1">
+                            <button @click="selectedCategory = 'all'" :class="selectedCategory === 'all' ? 'bg-orange-500/10 text-foodAmber font-bold' : 'text-slate-600 dark:text-slate-400'" class="w-full text-left px-3 py-2 rounded-xl text-sm transition-all">Semua Menu</button>
+                            <template x-for="cat in categories">
+                                <button @click="selectedCategory = cat.id" :class="selectedCategory === cat.id ? 'bg-orange-500/10 text-foodAmber font-bold' : 'text-slate-600 dark:text-slate-400'" class="w-full text-left px-3 py-2 rounded-xl text-sm transition-all" x-text="cat.name"></button>
+                            </template>
+                        </div>
+                    </div>
+                    <hr class="border-slate-100 dark:border-white/5">
+                    <div>
+                        <h3 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-3">Urutkan Harga</h3>
+                        <select x-model="sortBy" class="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl p-2.5 text-sm focus:outline-none">
+                            <option value="default" class="dark:bg-cardDark">Default</option>
+                            <option value="low-high" class="dark:bg-cardDark">Termurah &rarr; Termahal</option>
+                            <option value="high-low" class="dark:bg-cardDark">Termahal &rarr; Termurah</option>
+                        </select>
+                    </div>
+                    <hr class="border-slate-100 dark:border-white/5">
+                    <div>
+                        <h3 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-3">Maksimum Budget</h3>
+                        <input type="range" min="15000" max="200000" step="5000" x-model="maxPrice" class="w-full accent-foodAmber cursor-pointer">
+                        <div class="flex justify-between items-center mt-2 text-xs font-semibold">
+                            <span>Rp 15k</span>
+                            <span class="text-foodAmber" x-text="formatRupiah(maxPrice)"></span>
+                        </div>
+                    </div>
+                    <button @click="resetFilters()" class="w-full text-xs font-bold uppercase py-2.5 bg-slate-100 dark:bg-white/5 rounded-xl hover:bg-slate-200 dark:hover:bg-white/10 text-center">Reset Filter</button>
+                </aside>
+
+                <!-- Products Display Area Container Grid -->
+                <main class="lg:col-span-3">
+                    <div x-show="filteredProducts().length === 0" class="text-center py-20 bg-white dark:bg-cardDark rounded-2xl border border-dashed border-slate-200 dark:border-white/10">
+                        <i class="fa-solid fa-shuttle-space text-4xl text-slate-300 mb-3"></i>
+                        <p class="text-slate-500 text-sm">Maaf, menu makanan tidak cocok dengan kriteria filter Anda.</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <template x-for="product in filteredProducts()" :key="product.id">
+                            <div data-aos="fade-up" class="group bg-white dark:bg-cardDark border border-orange-50 dark:border-white/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all flex flex-col justify-between">
+                                <div class="relative aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-slate-900">
+                                    <img :src="product.image" :alt="product.name" class="w-full h-full object-cover cursor-pointer" @click="openDetail(product)">
+                                    <button @click="toggleWishlist(product)" class="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/80 dark:bg-brandDark/80 backdrop-blur-md flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-rose-500">
+                                        <i class="fa-heart" :class="isWishlisted(product.id) ? 'fa-solid text-rose-500' : 'fa-regular'"></i>
+                                    </button>
+                                </div>
+                                <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
+                                    <div>
+                                        <h4 class="font-bold text-slate-900 dark:text-white line-clamp-1 cursor-pointer text-sm" @click="openDetail(product)" x-text="product.name"></h4>
+                                        <p class="text-base font-black mt-2 text-foodAmber" x-text="formatRupiah(product.price)"></p>
+                                    </div>
+                                    <button @click="addToCart(product)" class="w-full bg-slate-900 text-white dark:bg-white dark:text-brandDark font-bold py-2.5 rounded-xl text-xs hover:bg-foodAmber dark:hover:bg-foodAmber flex items-center justify-center space-x-2">
+                                        <i class="fa-solid fa-cart-plus"></i> <span>Tambah Pesanan</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. CATEGORIES TAB VIEW PAGE -->
+    <div x-show="currentTab === 'categories'" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-black tracking-tight food-title">Menu Kategori Pilihan</h2>
+            <p class="text-slate-400 text-sm mt-2">Pilih varian sajian kuliner lezat yang ingin kamu nikmati hari ini.</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <template x-for="cat in categories">
+                <div @click="selectedCategory = cat.id; currentTab = 'shop';" 
+                     class="group cursor-pointer bg-white dark:bg-cardDark border border-orange-50 dark:border-white/5 rounded-3xl p-8 text-center transition-all hover:border-foodAmber hover:shadow-2xl hover:-translate-y-1">
+                    <div :class="`w-20 h-20 mx-auto rounded-full flex items-center justify-center text-3xl mb-6 shadow-md ${cat.bgClass}`">
+                        <i :class="cat.icon"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white" x-text="cat.name"></h3>
+                    <p class="text-xs text-slate-400 mt-2">Jelajahi Semua Varian Menu &rarr;</p>
+                </div>
+            </template>
+        </div>
+    </div>
+
+    <!-- 4. WISHLIST TAB VIEW PAGE -->
+    <div x-show="currentTab === 'wishlist'" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-black tracking-tight food-title">Menu Favorit Saya</h2>
+            <div class="w-12 h-1 bg-foodAmber mx-auto mt-2 rounded-full"></div>
+        </div>
+        <div x-show="wishlist.length === 0" class="text-center py-16 text-slate-400 space-y-4">
+            <i class="fa-solid fa-heart-crack text-5xl opacity-30 text-foodAmber"></i>
+            <p>Belum ada makanan atau minuman idaman yang dimasukkan ke daftar favorit.</p>
+            <button @click="currentTab = 'shop'" class="inline-block px-6 py-2.5 bg-foodAmber text-white text-xs font-bold rounded-full">Cari Makanan Lezat</button>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <template x-for="product in wishlist" :key="product.id">
+                <div class="bg-white dark:bg-cardDark border border-orange-50 dark:border-white/5 rounded-2xl overflow-hidden flex flex-col justify-between">
+                    <img :src="product.image" :alt="product.name" class="w-full aspect-[4/3] object-cover">
+                    <div class="p-5 space-y-4">
+                        <h4 class="font-bold text-sm text-slate-900 dark:text-white truncate" x-text="product.name"></h4>
+                        <div class="flex items-center justify-between">
+                            <span class="font-black text-foodAmber" x-text="formatRupiah(product.price)"></span>
+                            <button @click="toggleWishlist(product)" class="text-rose-500 text-xs font-semibold hover:underline">Hapus</button>
+                        </div>
+                        <button @click="addToCart(product); toggleWishlist(product);" class="w-full py-2 bg-slate-950 text-white dark:bg-white dark:text-slate-950 rounded-xl font-bold text-xs">Pindahkan ke Keranjang</button>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+
+    <!-- 5. CHECKOUT PAGE STATE VIEW SYSTEM -->
+    <div x-show="currentTab === 'checkout'" class="py-16 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-black mb-8 text-center sm:text-left food-title"><i class="fa-solid fa-map-location-dot text-foodAmber mr-2"></i>Detail Pengantaran Kuliner</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Delivery Address Form -->
+            <div class="md:col-span-2 bg-white dark:bg-cardDark p-6 rounded-2xl border border-orange-50 dark:border-white/5 space-y-4">
+                <h3 class="font-bold text-sm uppercase tracking-wider text-slate-400 mb-2">Informasi Lokasi Pelanggan</h3>
+                <div>
+                    <label class="block text-xs text-slate-400 font-bold uppercase mb-2">Nama Pemesan / Penerima</label>
+                    <input type="text" x-model="checkoutForm.name" class="w-full bg-slate-50 dark:bg-brandDark border border-slate-200 dark:border-white/10 rounded-xl p-3 text-sm focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 font-bold uppercase mb-2">Alamat Lengkap (Sertakan No. Kamar / Patokan)</label>
+                    <textarea rows="3" x-model="checkoutForm.address" class="w-full bg-slate-50 dark:bg-brandDark border border-slate-200 dark:border-white/10 rounded-xl p-3 text-sm focus:outline-none resize-none"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 font-bold uppercase mb-2">Opsi Pengantaran Kurir Instan</label>
+                    <select x-model.number="shippingCost" class="w-full bg-slate-50 dark:bg-brandDark border border-slate-200 dark:border-white/10 rounded-xl p-3 text-sm focus:outline-none">
+                        <option value="15000">Kurir Motor Instan (Rp 15.000) - Estimasi Hangat (20-30 Menit)</option>
+                        <option value="8000">Kurir Motor Hemat (Rp 8.000) - Estimasi 45-60 Menit</option>
+                        <option value="0">Ambil Sendiri di Resto / Pick-Up (Rp 0)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Payment Summary Side Invoice Box -->
+            <div class="bg-white dark:bg-cardDark p-6 rounded-2xl border border-orange-50 dark:border-white/5 flex flex-col justify-between h-fit space-y-6">
+                <div>
+                    <h3 class="font-bold text-sm uppercase tracking-wider text-slate-400 mb-4">Nota Pembayaran</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between"><span>Subtotal Makanan:</span><span x-text="formatRupiah(cartTotal())"></span></div>
+                        <div class="flex justify-between"><span>Ongkos Kirim:</span><span x-text="formatRupiah(shippingCost)"></span></div>
+                        <div class="flex justify-between text-emerald-600 font-bold" x-show="promoApplied"><span>Diskon Voucher:</span><span>-Rp 30.000</span></div>
+                        <hr class="border-slate-100 dark:border-white/5 my-2">
+                        <div class="flex justify-between font-black text-base text-foodAmber"><span>Total Akhir:</span><span x-text="formatRupiah(finalCheckoutTotal())"></span></div>
+                    </div>
+                </div>
+                <button @click="submitFinalCheckoutOrder()" class="w-full py-3.5 bg-gradient-to-r from-foodAmber to-amber-500 text-white font-black text-center rounded-xl shadow-md">Proses Buat Pesanan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SHOPPING CART SIDEBAR MODAL PANEL OVERLAY -->
+    <div x-show="cartOpen" class="fixed inset-0 z-50 overflow-hidden" x-transition style="display: none;">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="cartOpen = false"></div>
+        <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
+            <div class="w-screen max-w-md bg-white dark:bg-cardDark flex flex-col shadow-2xl">
+                <div class="px-6 py-5 border-b border-slate-100 dark:border-white/5 flex items-center justify-between">
+                    <h3 class="text-base font-bold flex items-center space-x-2 food-title"><i class="fa-solid fa-pizza-slice text-foodAmber"></i> <span>Keranjang Hidangan</span></h3>
+                    <button @click="cartOpen = false" class="text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
+                </div>
+                <!-- Cart Lists Item -->
+                <div class="flex-1 overflow-y-auto p-6 space-y-4">
+                    <div x-show="cart.length === 0" class="text-center py-20 text-slate-400 space-y-2">
+                        <i class="fa-solid fa-basket-shopping text-5xl opacity-30 text-foodAmber"></i>
+                        <p class="text-xs">Keranjang kuliner Anda masih kosong.</p>
+                    </div>
+                    <template x-for="item in cart" :key="item.product.id">
+                        <div class="flex items-center space-x-4 bg-slate-50 dark:bg-brandDark/50 p-3 rounded-xl border border-slate-100 dark:border-white/5">
+                            <img :src="item.product.image" :alt="item.product.name" class="w-14 h-14 object-cover rounded-lg bg-slate-100">
+                            <div class="flex-1 min-w-0">
+                                <h4 class="font-bold text-xs truncate" x-text="item.product.name"></h4>
+                                <p class="text-xs text-slate-400" x-text="formatRupiah(item.product.price)"></p>
+                                <div class="flex items-center space-x-2 mt-2">
+                                    <button @click="updateQty(item.product.id, -1)" class="w-5 h-5 bg-slate-200 dark:bg-white/10 rounded text-xs">-</button>
+                                    <span class="text-xs font-bold w-5 text-center" x-text="item.quantity"></span>
+                                    <button @click="updateQty(item.product.id, 1)" class="w-5 h-5 bg-slate-200 dark:bg-white/10 rounded text-xs">+</button>
+                                </div>
+                            </div>
+                            <button @click="removeItem(item.product.id)" class="text-slate-400 hover:text-rose-500 p-2"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    </template>
+                </div>
+                <!-- Input Promo Code Section inside Cart Area -->
+                <div class="px-6 py-3 border-t border-slate-100 dark:border-white/5 bg-slate-50/30">
+                    <label class="block text-[10px] uppercase font-black text-slate-400 tracking-wider mb-1.5">Mempunyai Voucher Diskon Lapar?</label>
+                    <div class="flex gap-2">
+                        <input type="text" placeholder="Masukkan kode..." x-model="inputCoupon" :disabled="promoApplied" class="bg-white dark:bg-brandDark border border-slate-200 dark:border-white/10 rounded-lg px-3 py-1.5 text-xs flex-1 focus:outline-none uppercase">
+                        <button @click="applyPromo()" :class="promoApplied ? 'bg-emerald-500/20 text-emerald-600' : 'bg-slate-900 text-white dark:bg-white dark:text-slate-950'" class="px-4 py-1.5 rounded-lg text-xs font-bold" x-text="promoApplied ? 'Klaim' : 'Pakai'"></button>
+                    </div>
+                </div>
+                <!-- Bottom Invoice Summary -->
+                <div class="p-6 border-t border-slate-100 dark:border-white/5 space-y-4 bg-slate-50/50 dark:bg-brandDark/20">
+                    <div class="flex justify-between items-center text-xs font-bold">
+                        <span>Total Hidangan:</span>
+                        <span class="text-foodAmber text-base font-black" x-text="formatRupiah(cartTotal() - (promoApplied ? 30000 : 0))"></span>
+                    </div>
+                    <button @click="goToCheckoutPage()" :disabled="cart.length === 0" class="w-full bg-slate-950 text-white dark:bg-white dark:text-slate-950 disabled:opacity-50 font-black py-3 rounded-xl text-center text-xs uppercase tracking-wider">Lanjut Pengantaran</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRODUCT DETAIL PREVIEW MODAL FRAME COMPONENT -->
+    <div x-show="detailOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto" x-transition style="display: none;">
+        <div class="fixed inset-0 bg-black/70 backdrop-blur-sm" @click="detailOpen = false"></div>
+        <div class="relative w-full max-w-2xl bg-white dark:bg-cardDark rounded-3xl overflow-hidden shadow-2xl border border-slate-100 dark:border-white/5 z-10 grid grid-cols-1 md:grid-cols-2">
+            <button @click="detailOpen = false" class="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-black/40 text-white flex items-center justify-center hover:bg-foodAmber"><i class="fa-solid fa-xmark"></i></button>
+            <div class="aspect-[4/3] md:aspect-auto">
+                <img :src="activeProduct.image" :alt="activeProduct.name" class="w-full h-full object-cover">
+            </div>
+            <div class="p-6 sm:p-8 flex flex-col justify-between space-y-6">
+                <div>
+                    <span class="inline-block bg-orange-500/10 text-foodAmber font-bold text-xs uppercase px-2.5 py-1 rounded" x-text="getCategoryName(activeProduct.category)"></span>
+                    <h3 class="text-xl font-bold mt-2 text-slate-900 dark:text-white" x-text="activeProduct.name"></h3>
+                    <p class="text-lg font-bold text-foodAmber mt-2" x-text="formatRupiah(activeProduct.price)"></p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-4 leading-relaxed">Diracik menggunakan bumbu dan bahan baku segar berkualitas premium oleh tim dapur berpengalaman, menjamin cita rasa higienis dan kelezatan maksimal saat sampai di tempat Anda.</p>
+                </div>
+                <button @click="addToCart(activeProduct); detailOpen = false;" class="w-full bg-slate-900 dark:bg-white dark:text-brandDark text-white font-bold py-3 rounded-xl hover:bg-foodAmber flex items-center justify-center space-x-2 text-xs uppercase tracking-wider"><i class="fa-solid fa-cart-plus"></i> <span>Tambahkan ke Keranjang</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FLOATING WHATSAPP BUTTON ACCESSIBILITY LINK -->
+    <a href="https://api.whatsapp.com/send/?phone=6287825097850&text=Halo%20Velora%20Eats" target="_blank" rel="noopener noreferrer" @click.
+    stop class="fixed bottom-6 right-6 z-40 bg-emerald-500 text-white w-14 h-14 rounded-xl flex items-center justify-center text-2xl shadow-xl hover:bg-emerald-600 transition-transform hover:scale-110"><i class="fa-brands fa-whatsapp"></i></a>
+
+    <!-- FOOTER DESIGN PANEL STRUCTURE -->
+    <footer class="bg-white dark:bg-brandDark border-t border-orange-100/40 dark:border-white/5 mt-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-orange-50 dark:border-white/5">
+                <div class="space-y-4">
+                    <span class="text-xl font-black tracking-wide text-slate-900 dark:text-white food-title">Velora<span class="text-foodAmber">Eats</span></span>
+                    <p class="text-xs text-slate-400 leading-relaxed max-w-xs">Menyajikan dan mengantarkan kuliner bercita rasa premium standar bintang lima langsung ke depan pintu rumah Anda.</p>
+                </div>
+                <div class="flex flex-col gap-2 font-semibold text-xs text-slate-500 dark:text-slate-400">
+                    <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider mb-2">Peta Menu Kuliner</h4>
+                    <button @click="currentTab = 'home'; window.scrollTo(0,0)" class="text-left hover:text-foodAmber">Beranda Utama</button>
+                    <button @click="currentTab = 'shop'; window.scrollTo(0,0)" class="text-left hover:text-foodAmber">Daftar Menu</button>
+                    <button @click="currentTab = 'categories'; window.scrollTo(0,0)" class="text-left hover:text-foodAmber">Kategori Makanan</button>
+                    <button @click="currentTab = 'wishlist'; window.scrollTo(0,0)" class="text-left hover:text-foodAmber">Menu Favorit</button>
+                </div>
+                <div class="space-y-4 flex flex-col justify-between md:items-end">
+                    <a href="index.html" class="inline-flex items-center space-x-2 px-5 py-2.5 text-xs font-bold tracking-wide text-slate-500 border border-slate-200 dark:border-white/10 rounded-full hover:border-foodAmber transition-all">
+                        <i class="fa-solid fa-arrow-left-long"></i> <span>Kembali ke WebVerse</span>
+                    </a>
+                </div>
+            </div>
+            <p class="text-center text-[11px] text-slate-500">&copy; 2026 Velora Eats Premium Culinary. Fresh & Delightful Experience.</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 800, // kecepatan animasi (800ms)
+        once: true,    // animasi hanya berjalan sekali saat di-scroll
+        easing: 'ease-in-out'
+    });
+</script>
+
+    <!-- INTERACTIVE ENGINE JAVASCRIPT STATE CORE CONTROLLER SYSTEM -->
+    <script>
+        function megaFoodSystem() {
+            return {
+                products: [
+                    { id: 1, name: 'Premium Wagyu Steak with Truffle Sauce', category: 'main', price: 185000, image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=500&q=80' },
+                    { id: 2, name: 'Velora Almond Butter Croissant', category: 'bakery', price: 38000, image: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=500&q=80' },
+                    { id: 3, name: 'Smoked Salmon Creamy Fettuccine', category: 'main', price: 115000, image: 'https://images.unsplash.com/photo-1645112411341-6c4fd023714a?auto=format&fit=crop&w=500&q=80' },
+                    { id: 4, name: 'Iced Matcha Oat Milk Latte', category: 'beverage', price: 42000, image: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=500&q=80' },
+                    { id: 5, name: 'Classic New York Strawberry Cheesecake', category: 'bakery', price: 48000, image: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=500&q=80' },
+                    { id: 6, name: 'Sparkling Yuzu Berry Mocktail', category: 'beverage', price: 35000, image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=500&q=80' }
+                ],
+                categories: [
+                    { id: 'main', name: 'Main Course Hidangan Utama', icon: 'fa-solid fa-bowl-rice', bgClass: 'bg-orange-100 text-orange-700 dark:bg-orange-950/30 dark:text-orange-400' },
+                    { id: 'bakery', name: 'Bakery & Pastry', icon: 'fa-solid fa-croissant', bgClass: 'bg-amber-100 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400' },
+                    { id: 'beverage', name: 'Fresh Beverages Minuman', icon: 'fa-solid fa-glass-water', bgClass: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-950/30 dark:text-yellow-400' }
+                ],
+                
+                currentTab: 'home',
+                mobileNavOpen: false,
+                searchQuery: '',
+                selectedCategory: 'all',
+                maxPrice: 200000,
+                sortBy: 'default',
+
+                cartOpen: false,
+                detailOpen: false,
+                activeProduct: {},
+
+                cart: [],
+                wishlist: [],
+
+                inputCoupon: '',
+                promoApplied: false,
+
+                shippingCost: 15000,
+                checkoutForm: { name: '', address: '' },
+
+                filteredProducts() {
+                    let filtered = this.products.filter(p => {
+                        const search = p.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+                        const category = this.selectedCategory === 'all' || p.category === this.selectedCategory;
+                        const prc = p.price <= this.maxPrice;
+                        return search && category && prc;
+                    });
+                    if (this.sortBy === 'low-high') filtered.sort((a,b) => a.price - b.price);
+                    if (this.sortBy === 'high-low') filtered.sort((a,b) => b.price - a.price);
+                    return filtered;
+                },
+
+                resetFilters() {
+                    this.searchQuery = ''; this.selectedCategory = 'all'; this.maxPrice = 200000; this.sortBy = 'default';
+                },
+                getCategoryName(id) { const found = this.categories.find(c => c.id === id); return found ? found.name : 'Kuliner'; },
+                formatRupiah(num) { return 'Rp ' + num.toLocaleString('id-ID'); },
+
+                addToCart(product) {
+                    const target = this.cart.find(item => item.product.id === product.id);
+                    if (target) { target.quantity++; } else { this.cart.push({ product, quantity: 1 }); }
+                    this.cartOpen = true;
+                },
+                updateQty(id, amt) {
+                    const target = this.cart.find(item => item.product.id === id);
+                    if (target) { target.quantity += amt; if (target.quantity <= 0) this.removeItem(id); }
+                },
+                removeItem(id) { this.cart = this.cart.filter(item => item.product.id !== id); },
+                cartCount() { return this.cart.reduce((sum, item) => sum + item.quantity, 0); },
+                cartTotal() { return this.cart.reduce((sum, item) => sum + (item.product.price * item.quantity), 0); },
+
+                toggleWishlist(product) {
+                    if (this.isWishlisted(product.id)) {
+                        if(confirm(`Hapus ${product.name} dari daftar favorit?`)) {
+                            this.wishlist = this.wishlist.filter(p => p.id !== product.id);
+                        }
+                    } else { this.wishlist.push(product); }
+                },
+                isWishlisted(id) { return this.wishlist.some(p => p.id === id); },
+
+                applyPromo() {
+                    let kodeInput = this.inputCoupon.trim().toUpperCase();
+                    if (kodeInput === 'VELORA2026EAT') { this.promoApplied = true; } else { alert('Kode kupon makanan tidak valid.' + kodeInput); }
+                },
+
+                openDetail(product) { this.activeProduct = product; this.detailOpen = true; },
+                
+                goToCheckoutPage() {
+                    this.cartOpen = false; this.currentTab = 'checkout'; window.scrollTo(0,0);
+                },
+                finalCheckoutTotal() {
+                    let total = this.cartTotal() + this.shippingCost;
+                    if (this.promoApplied) total -= 30000;
+                    return Math.max(0, total);
+                },
+                submitFinalCheckoutOrder() {
+                    if (!this.checkoutForm.name || !this.checkoutForm.address) { alert('Harap masukkan Nama Pemesan dan Alamat Pengantaran Resto.'); return; }
+                    alert(`[PESANAN DIPROSES DAPUR RESTO]\n\nPemesan: ${this.checkoutForm.name}\nTotal Pembayaran: ${this.formatRupiah(this.finalCheckoutTotal())}\n\nKurir instan segera mengantarkan hidangan hangat Anda!`);
+                    this.cart = []; this.checkoutForm = { name: '', address: '' }; this.promoApplied = false; this.inputCoupon = ''; this.currentTab = 'home';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
