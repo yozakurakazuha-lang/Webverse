@@ -1063,7 +1063,25 @@ form textarea:focus{
     .contact-container{ grid-template-columns:1fr; }
 }
 
-.logo-icon {
+    .wadah-logo {
+  display: flex;
+  justify-content: center; /* Bikin logo di tengah */
+  padding: 20px;
+}
+
+.logo-web {
+  width: 150px; /* Ukuran logonya, bisa dibesarkan/dikecilkan */
+  height: auto;
+  border-radius: 12px; /* Membuat ujungnya agak membulat */
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3); /* Bayangan merah tipis */
+  transition: transform 0.3s ease; /* Efek transisi halus dan ringan */
+}
+
+.logo-web:hover {
+  transform: scale(1.05); /* Logo sedikit membesar kalau kursor diarahkan */
+}
+
+/* .logo-icon {
     animation: pulseLogo 3s infinite alternate ease-in-out;
 }
 .logo-text {
@@ -1077,7 +1095,7 @@ form textarea:focus{
 @keyframes pulseLogo {
     0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.4)); }
     100% { transform: scale(1.1); filter: drop-shadow(0 0 15px rgba(124, 77, 255, 0.6)); }
-}
+} */
 
 /* Tambahkan ini di bagian <style> */
 .popup-container {
@@ -1146,6 +1164,80 @@ form textarea:focus{
     filter: drop-shadow(0 0 5px rgba(255, 183, 3, 0.5));
 }
 
+    .wadah-pengumuman {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  font-family: sans-serif;
+}
+
+/* Desain Kotak Utama */
+.kotak-pengumuman {
+  background-color: #1a1a1a; /* Warna gelap */
+  color: white;
+  width: 100%;
+  max-width: 600px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  border: 1px solid #333;
+  animation: munculHalus 0.5s ease-out; /* Animasi ringan */
+}
+
+/* Bagian Atas Kotak */
+.header-pengumuman {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: #242424;
+  border-bottom: 1px solid #333;
+  border-radius: 12px 12px 0 0;
+}
+
+.header-pengumuman h2 { margin: 0; font-size: 18px; }
+
+.label-baru {
+  background: rgba(220, 38, 38, 0.2);
+  color: #ef4444;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Bagian Isi Kotak */
+.isi-pengumuman { padding: 20px; }
+.judul-seksi { margin: 0 0 15px 0; font-size: 16px; color: #fca5a5; }
+
+.daftar-fitur { list-style: none; padding: 0; margin: 0; }
+
+.item-fitur {
+  display: flex;
+  gap: 15px;
+  padding: 15px;
+  background: #2a2a2a;
+  border-radius: 8px;
+}
+
+.ikon-fitur { font-size: 24px; }
+.teks-fitur strong { display: block; margin-bottom: 5px; font-size: 15px; }
+.teks-fitur p { margin: 0; font-size: 14px; color: #ccc; line-height: 1.5; }
+
+/* Animasi Muncul yang Sangat Ringan (hanya main transparansi & posisi) */
+@keyframes munculHalus {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Agar tetap rapi di layar HP */
+@media (max-width: 480px) {
+  .header-pengumuman {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+}
+
 </style>
 
 </head>
@@ -1158,8 +1250,9 @@ form textarea:focus{
     <!-- NAVBAR -->
     <nav class="navbar">
         <div class="nav-container">
-            <div class="logo">
-    <svg class="logo-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div class="wadah-logo">
+                <img src="logo.png" alt="Logo Web" class="logo-web">
+    <!-- <svg class="logo-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="url(#paint0_linear)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M2 17L12 22L22 17" stroke="url(#paint1_linear)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M2 12L12 17L22 12" stroke="url(#paint2_linear)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1177,7 +1270,7 @@ form textarea:focus{
                 <stop offset="1" stop-color="#7C4DFF"/>
             </linearGradient>
         </defs>
-    </svg>
+    </svg> -->
     <span class="logo-text">WebVerse</span>
 </div>
             <ul class="nav-menu">
@@ -1710,6 +1803,28 @@ form textarea:focus{
         <button onclick="closeUpdatePopup()" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #070b14; border: none; padding: 0.8rem 2rem; font-weight: 600; border-radius: 10px; cursor: pointer; font-family: 'Poppins'; transition: 0.3s; width: 100%;">Paham, Lanjutkan</button>
     </div>
 </div>
+
+    <section class="wadah-pengumuman">
+  <div class="kotak-pengumuman">
+    <div class="header-pengumuman">
+      <h2>Papan Pengumuman</h2>
+      <span class="label-baru">Update Terbaru</span>
+    </div>
+    
+    <div class="isi-pengumuman">
+      <h3 class="judul-seksi">✨ Fitur Terbaru</h3>
+      <ul class="daftar-fitur">
+        <li class="item-fitur">
+          <div class="ikon-fitur">🐉</div>
+          <div class="teks-fitur">
+            <strong>Perubahan Logo</strong>
+            <p>Mulai hari ini, kami menggunakan identitas visual baru dengan logo naga merah yang lebih tegas.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
 
     <script>
         /* 1. CURSOR GLOW */
